@@ -1,6 +1,9 @@
 pipeline {
    agent none 
-
+   options {
+        timeout(time: 1, unit: 'HOURS')
+        buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10')
+    }
     tools {
         maven 'MAVEN3'
     }
@@ -66,6 +69,16 @@ pipeline {
         }
   */          
         stage('Déploiement intégration') {
+            when {
+                branch 'main'
+                beforeOptions true
+                beforeInput true
+                beforeAgent true
+            }
+            options {
+                timeout(2)
+            }
+            agent any
             input {
                 message 'Vers quel datacenter voulez-vous déployer ?'
                 ok 'Déployer'

@@ -1,3 +1,6 @@
+def datacenters = []
+def integrationURL = ''
+
 pipeline {
    agent none 
    options {
@@ -68,36 +71,39 @@ pipeline {
             
         }
   */          
-        stage('Déploiement intégration') {
-          /*  when {
-                branch 'main'
-                beforeOptions true
-                beforeInput true
-                beforeAgent true
-            } */
-            options {
-                timeout(2)
-            }
+    stage('Reading configuration') {
             agent any
-            input {
-                message 'Voulez-vous déployer ?'
-                ok 'Déployer'
-            }
-
             steps {
-                echo "Déploiement vers les datacenters"
+                script {
+                    echo "Reading configuration"
+                    def props = readJSON file: 'deployment.json'
+                    dataCenters = props['dataCenters']
+                    integrationUrl = props['integrationURL']
+                }
+            }
+                
+        }
+        stage('Déploiement intégration') {
+            agent none
+            steps {
+                input message: "Voulez vous déployer vers $dataCenters", ok: 'Déployer'
+                echo "Deploying ..."
+            }
+                
+        }
+    
+
+        stage('Déploiement intégration') {
+            agent any
+            steps {
+                echo "Déploiement intégration"
                 unstash 'application'
                 script {
-                   def props = readJSON file: 'deployment.json'
-                    def datacenters = props['dataCenters']
-                    def integrationURL = props['integrationURL']
                     for (datacenter in datacenters) {  
                         sh "cp *.jar $integrationURL/${datacenter}.jar"
                     }
                 }
+                
             }
-        }
-
-     }
-    
+        }    
 }

@@ -82,15 +82,11 @@ pipeline {
             input {
                 message 'Voulez-vous déployer ?'
                 ok 'Déployer'
-                parameters {
-                    choice choices: ['Paris', 'Lille', 'Lyon'], name: 'DATACENTER'
-                }
             }
 
             steps {
                 echo "Déploiement intégration $DATACENTER"
                 unstash 'application'
-                sh 'cp *.jar /home/dthibau/Formations/Jenkins/MyWork/Serveurs/${DATACENTER}.jar'
                 script {
                    def props = readJson file: 'deployment.json'
                     def datacenters = props['dataCenters']

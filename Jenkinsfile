@@ -20,8 +20,8 @@ pipeline {
                 }
                 success {
                     // One or more steps need to be included within each condition's block.
-                    archiveArtifacts artifacts: '**/application/target/*.jar', followSymlinks: false
-                    dir {'application/target'} {
+                    archiveArtifacts artifacts: 'application/target/*.jar', followSymlinks: false
+                    dir ('application/target') {
                         stash name: 'application', includes: '*.jar'
                     }
                 }

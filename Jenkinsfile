@@ -86,7 +86,7 @@ pipeline {
             }
                 
         }
-        stage('Déploiement intégration') {
+        stage('Question Déploiement intégration') {
             agent none
             steps {
                 input message: "Voulez vous déployer vers $dataCenters", ok: 'Déployer'
@@ -109,6 +109,7 @@ pipeline {
                 
             }
         }    
+    }
 }
 
 def checkSonarQualityGate(){

@@ -88,7 +88,7 @@ pipeline {
                 echo "Déploiement vers les datacenters"
                 unstash 'application'
                 script {
-                   def props = readJson file: 'deployment.json'
+                   def props = readJSON file: 'deployment.json'
                     def datacenters = props['dataCenters']
                     def integrationURL = props['integrationURL']
                     for (datacenter in datacenters) {  

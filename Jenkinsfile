@@ -80,7 +80,7 @@ pipeline {
             }
             agent any
             input {
-                message 'Vers quel datacenter voulez-vous déployer ?'
+                message 'Voulez-vous déployer ?'
                 ok 'Déployer'
                 parameters {
                     choice choices: ['Paris', 'Lille', 'Lyon'], name: 'DATACENTER'
@@ -91,7 +91,14 @@ pipeline {
                 echo "Déploiement intégration $DATACENTER"
                 unstash 'application'
                 sh 'cp *.jar /home/dthibau/Formations/Jenkins/MyWork/Serveurs/${DATACENTER}.jar'
-                
+                script {
+                   def props = readJson file: 'deployment.json'
+                    def datacenters = props['dataCenters']
+                    def integrationURL = props['integrationURL']
+                    for (datacenter in datacenters) {  
+                        sh "cp *.jar $integrationURL/${datacenter}.jar"
+                    }
+                }
             }
         }
 

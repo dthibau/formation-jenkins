@@ -58,6 +58,7 @@ pipeline {
                         dockerImage.push "${env.BRANCH_NAME}"
                     }
                 }
+            }
         }
         stage('Analyse qualité et vulnérabilités') {
             parallel {

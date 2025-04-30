@@ -48,6 +48,18 @@ pipeline {
              
         }
         stage('Analyse qualité et vulnérabilités') {
+            agent any
+            steps {
+                unstash 'application'
+                script {
+                     def dockerImage = docker.build('dthibau/multi-module', '.')
+
+                    docker.withRegistry('https://registry.hub.docker.com', 'DOCKERHUB') {
+                        dockerImage.push "${env.BRANCH_NAME}"
+                    }
+                }
+        }
+        stage('Analyse qualité et vulnérabilités') {
             parallel {
                 stage('Vulnérabilités') {
                     agent any 

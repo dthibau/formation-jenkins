@@ -13,11 +13,11 @@ pipeline {
         stage('Compile et tests') {
             agent {
                 kubernetes {
-                    inheritFrom 'jdk17-agent'
+                    yamlFile 'kubernetesPod.yml'
                 }
             }
             steps {
-                container(name:'openjdk-17') {
+                container(name:'jdk') {
                 echo 'Unit test et packaging'
                 sh './mvnw -Dmaven.test.failure.ignore=true clean package'
                 }

@@ -19,7 +19,7 @@ pipeline {
             steps {
                 container(name:'openjdk-17') {
                 echo 'Unit test et packaging'
-                sh './mvnw -Dmaven.test.failure.ignore=true clean package
+                sh './mvnw -Dmaven.test.failure.ignore=true clean package'
                 }
 
             } 

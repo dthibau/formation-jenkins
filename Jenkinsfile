@@ -1,3 +1,5 @@
+@Library('GlobalLib') _
+
 def datacenters = []
 def integrationURL = ''
 
@@ -18,6 +20,7 @@ pipeline {
             steps {
                 echo 'Unit test et packaging'
                 sh 'mvn -Dmaven.test.failure.ignore=true clean package'
+                createTarGz sourceDir:'.', extensions:['java','xml'], ouputDir:'dist'
             } 
             post {
                 always {
@@ -27,6 +30,7 @@ pipeline {
                 success {
                     // One or more steps need to be included within each condition's block.
                     archiveArtifacts artifacts: 'application/target/*.jar', followSymlinks: false
+                    archiveArtifacts artifacts: 'dist/*.tar.gz', followSymlinks: false
                     dir ('application/target') {
                         stash name: 'application', includes: '*.jar'
                     }

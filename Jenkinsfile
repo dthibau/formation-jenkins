@@ -47,7 +47,7 @@ pipeline {
             }
              
         }
-        stage('Analyse qualité et vulnérabilités') {
+        stage('Push image Docker') {
             agent any
             steps {
                 unstash 'application'
